@@ -1,4 +1,5 @@
 import { pathToRegexp, match, compile } from 'path-to-regexp';
+// @ts-ignore
 import { history } from 'umi';
 import { LocationDescriptor, HistoryLocation, isPlainObject } from 'handie-react-starter-antd';
 

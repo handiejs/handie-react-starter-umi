@@ -1,1 +1,1 @@
-export * from 'handie-react-starter-antd/controls';
+export * from 'handie-react-starter-antd/dist/controls';

@@ -1,1 +1,1 @@
-export * from 'handie-react-starter-antd/renderers';
+export * from 'handie-react-starter-antd/dist/renderers';
