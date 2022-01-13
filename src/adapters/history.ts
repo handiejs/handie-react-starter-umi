@@ -1,7 +1,12 @@
 import { pathToRegexp, match, compile } from 'path-to-regexp';
 // @ts-ignore
 import { history } from 'umi';
-import { LocationDescriptor, HistoryLocation, isPlainObject } from 'handie-react-starter-antd';
+import {
+  LocationDescriptor,
+  HistoryLocation,
+  LocationRoute,
+  isPlainObject,
+} from 'handie-react-starter-antd';
 
 let allRoutes: Record<string, any>[] = [];
 let routeMap: Record<string, any> = {};
@@ -20,14 +25,14 @@ function setRoutes(routes: Record<string, any>[]): void {
 }
 
 function findRouteDeeply(pathname: string, routes: any[] = allRoutes) {
-  let route;
+  const route: any = { current: undefined, ancestors: [] };
 
   for (let i = 0; i < routes.length; i++) {
     const r = routes[i];
     const dynamicMatched = pathToRegexp(r.path).exec(pathname);
 
     if (dynamicMatched || r.path === pathname) {
-      route = r;
+      route.current = r;
       break;
     }
 
@@ -35,9 +40,11 @@ function findRouteDeeply(pathname: string, routes: any[] = allRoutes) {
       continue;
     }
 
-    route = findRouteDeeply(pathname, r.routes);
+    const found = findRouteDeeply(pathname, r.routes);
 
-    if (route) {
+    if (found.current) {
+      route.current = found.current;
+      route.ancestors.unshift(r, ...found.ancestors);
       break;
     }
   }
@@ -45,21 +52,22 @@ function findRouteDeeply(pathname: string, routes: any[] = allRoutes) {
   return route;
 }
 
-function getLocation(): LocationDescriptor {
+function getLocation(): LocationRoute {
   const {
     location: { pathname, hash, query = {} },
   } = history;
 
-  const route = findRouteDeeply(pathname);
-  const { params = {} } = match(route.path, { decode: decodeURIComponent })(pathname) || {};
+  const { current, ancestors } = findRouteDeeply(pathname) as any;
+  const { params = {} } = match(current.path, { decode: decodeURIComponent })(pathname) || {};
 
   return {
-    name: route.name,
+    name: current.name,
     path: pathname,
-    rawPath: route.path,
+    rawPath: current.path,
     hash,
     query,
     params,
+    ancestors,
   };
 }
 
