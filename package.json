@@ -1,6 +1,6 @@
 {
   "name": "handie-react-starter-umi",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "`handie-react-starter-antd` + `umi`",
   "main": "dist/index.js",
   "module": "dist/index.js",
