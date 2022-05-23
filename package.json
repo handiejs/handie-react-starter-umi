@@ -39,7 +39,7 @@
     "release": "npm publish"
   },
   "dependencies": {
-    "handie-react-starter-antd": "0.0.6",
+    "handie-react-starter-antd": "0.0.7",
     "path-to-regexp": "6.2.0"
   },
   "peerDependencies": {
